@@ -1,7 +1,9 @@
 from flask import Flask, jsonify
+from flask_cors import CORS, cross_origin
 import sqlite3, random
 
 app = Flask(__name__)
+cors = CORS(app)
 
 DATABASE = "compas.db"
 
@@ -11,6 +13,7 @@ def get_db_connection():
     return conn
 
 @app.route("/", methods=["GET"])
+@cross_origin()
 def test():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -26,6 +29,7 @@ def test():
 PEOPLE_COUNT = 11757
 
 @app.route("/random-case", methods=["GET"])
+@cross_origin()
 def random_case():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -86,7 +90,8 @@ def random_case():
             x: person[x] for x in ['num_vr_cases', 'vr_case_number', 'vr_charge_degree', 'vr_offense_date', 'vr_charge_desc']
         }
 
-    return jsonify(data)
+    response = jsonify(data)
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True)
