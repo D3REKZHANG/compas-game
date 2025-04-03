@@ -6,6 +6,7 @@ import {
 import {
   updateScore,
   getScore,
+  getCompasScore,
   getFalsePositiveRate,
   getFalseNegativeRate,
   getTruePositiveRate,
@@ -17,6 +18,7 @@ const App = () => {
   const [data, setData] = useState<ParsedData | null>(null);
   const [scoreInput, setScoreInput] = useState<string>("")  
   const [score, setScore] = useState<number | null>(null);
+  const [compasScore, setCompasScore] = useState<number | null>(null);
   const [falsePositive, setFalsePositive] = useState<number | null>(null);
   const [falseNegative, setFalseNegative] = useState<number | null>(null);
   const [truePositive, setTruePositive] = useState<number | null>(null);
@@ -36,6 +38,7 @@ const App = () => {
   useEffect(() => {
     // Fetch the scores and rates whenever they change
     setScore(getScore());
+    setCompasScore(getCompasScore());
     setFalsePositive(getFalsePositiveRate());
     setFalseNegative(getFalseNegativeRate());
     setTruePositive(getTruePositiveRate());
@@ -82,6 +85,7 @@ const App = () => {
     getData()
     resetGame(); // Reset game logic in AppData
     setScore(0); // Update the score in the component state
+    setCompasScore(0)
     setFalsePositive(0); // Reset false positive rate
     setFalseNegative(0); // Reset false negative rate
     setTruePositive(0); // Reset true positive rate
@@ -258,6 +262,7 @@ const App = () => {
     <h2>Metrics</h2>
       <ul>
         <li><strong>Score:</strong> {score}</li>
+        <li><strong>Compas Score:</strong> {compasScore}</li>
         <li><strong>False Positive Rate:</strong> {falsePositive}</li>
         <li><strong>False Negative Rate:</strong> {falseNegative}</li>
         <li><strong>True Positive Rate:</strong> {truePositive}</li>
