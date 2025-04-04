@@ -57,10 +57,14 @@ export type ParsedData = {
   is_violent_recid: number;
   jailhistory: JailHistory[];
   previous_charges: Charge[];
-  prisonhistory: PrisonHistory;
+  prisonhistory: PrisonHistory[];
   recid_info: RecidInfo | null;
   violent_recid_info: ViolentRecidInfo | null
 };
+
+const format = (date: string) => {
+  return date?.split(' ')[0];
+}
 
 export const fetchData = async (): Promise<ParsedData | null> => {
   try {
@@ -74,31 +78,31 @@ export const fetchData = async (): Promise<ParsedData | null> => {
         decile_score: assessment.decile_score,
         raw_score: assessment.raw_score,
         rec_supervision_level_text: assessment.rec_supervision_level_text,
-        screening_date: assessment.screening_date,
+        screening_date: format(assessment.screening_date),
         type_of_assessment: assessment.type_of_assessment,
       })),
       demographics: {
         age: jsonData.demographics.age,
-        name: jsonData.demographics.name,
+        name: jsonData.demographics.name?.toUpperCase(),
         race: jsonData.demographics.race,
         sex: jsonData.demographics.sex,
       },
       is_recid: jsonData.is_recid,
       is_violent_recid: jsonData.is_violent_recid,
       jailhistory: jsonData.jailhistory.map((history: any) => ({
-        in_custody: history.in_custody,
-        out_custody: history.out_custody,
+        in_custody: format(history.in_custody),
+        out_custody: format(history.out_custody),
       })),
       previous_charges: jsonData.previous_charges.map((charge: any) => ({
         charge: charge.charge,
         charge_degree: charge.charge_degree,
         charge_number: charge.charge_number,
-        offense_date: charge.offense_date,
+        offense_date: format(charge.offense_date),
       })),
       prisonhistory: Array.isArray(jsonData.prisonhistory)
         ? jsonData.prisonhistory.map((history: any) => ({
-            in_custody: history.in_custody,
-            out_custody: history.out_custody,
+            in_custody: format(history.in_custody),
+            out_custody: format(history.out_custody),
           }))
         : [], // If it's not an array, default to an empty array
       recid_info: jsonData.recid_info
@@ -108,9 +112,9 @@ export const fetchData = async (): Promise<ParsedData | null> => {
             r_charge_degree: jsonData.recid_info.r_charge_degree,
             r_charge_desc: jsonData.recid_info.r_charge_desc,
             r_days_from_arrest: jsonData.recid_info.r_days_from_arrest,
-            r_jail_in: jsonData.recid_info.r_jail_in,
-            r_jail_out: jsonData.recid_info.r_jail_out,
-            r_offense_date: jsonData.recid_info.r_offense_date,
+            r_jail_in: format(jsonData.recid_info.r_jail_in),
+            r_jail_out: format(jsonData.recid_info.r_jail_out),
+            r_offense_date: format(jsonData.recid_info.r_offense_date),
           }
         : null,
       violent_recid_info: jsonData.violent_recid_info
@@ -119,7 +123,7 @@ export const fetchData = async (): Promise<ParsedData | null> => {
             vr_case_number: jsonData.violent_recid_info.vr_case_number,
             vr_charge_degree: jsonData.violent_recid_info.vr_charge_degree,
             vr_charge_desc: jsonData.violent_recid_info.vr_charge_desc,
-            vr_offense_date: jsonData.violent_recid_info.vr_offense_date,
+            vr_offense_date: format(jsonData.violent_recid_info.vr_offense_date),
           }
         : null,
     };
