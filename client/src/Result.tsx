@@ -12,14 +12,14 @@ const Result = (props) => {
     <div>
       <h1> COMPAS Game </h1>
 
-      <h2>Results</h2>
+      <h2>Trial {(final) ? "2" : "1"} Results</h2>
       <ul>
         <li><strong>Your Score:</strong> {score} </li>
         <li><strong>Compas Score:</strong> {compasScore} </li>
-        <li><strong>False Positive Rate:</strong> {falsePositive}</li>
-        <li><strong>False Negative Rate:</strong> {falseNegative}</li>
-        <li><strong>True Positive Rate:</strong> {truePositive}</li>
-        <li><strong>True Negative Rate:</strong> {trueNegative}</li>
+        <li><strong>True Positives:</strong> {truePositive} </li>
+        <li><strong>False Positives:</strong> {falsePositive} </li>
+        <li><strong>True Negatives:</strong> {trueNegative} </li>
+        <li><strong>False Negatives:</strong> {falseNegative} </li>
       </ul>
 
       {(score >= compasScore + 2) && <p>
@@ -32,7 +32,17 @@ const Result = (props) => {
         The results of your predictions matched those of COMPAS. Your prediction accuracy for reoffenders and non-reoffenders along with the algorithm mirrors each other which shows demographic data had equivalent effects on your judgment and the algorithm's predictions. The matching observations prompt questions regarding what extent human and AI predictions are influenced by the same data.
       </p>}
 
-      {/* TODO: NEED TO ADD THE TEXT FOR FALSE POSITIVE AND FALS NEGATIVE STUFF */}
+      {(falsePositive > falseNegative) && <p>
+        Your assessments showed a tendency to be cautious by incorrectly detaining more non-reoffenders (false positives). Comparatively, you mistakenly released high-risk individuals who later reoffended at a lower rate (false negatives). Your strategy is conservative regarding risks, yet leads to potentially unnecessarily detaining defendants. Determine if this matches your tolerance for risk and principles of fairness.
+      </p>}
+      {(falsePositive < falseNegative ) && <p>
+        Your assessments showed a tendency to be lenient by mistakenly releasing more high-risk individuals who later reoffended (false negatives). Comparatively, you incorrectly detained non-reoffenders at a lower rate (false positives). Your strategy results in less people being unnecessarily detained, but could pose safety risks. Determine if this matches your tolerance for risk and principles of fairness.
+      </p>}
+      {(falsePositive == falseNegative) && <p>
+        Your assessment method maintained a balanced approach and resulted in equal amounts of false positives and false negatives. The assessment strategy shows neutrality when judging risk while demonstrating how difficult it is to make exact predictions in unpredictable situations.
+      </p>}
+
+      {!final && <p> For Trial 2, we are going to reveal <strong> race demographics </strong> as well </p>}
 
       {final ?
         <button onClick={() => setGamestate("END")}> Continue </button> :

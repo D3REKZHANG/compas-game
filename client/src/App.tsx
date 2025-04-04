@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Quiz } from './Quiz'
-import { Intro } from './Intro'
-import { Result } from './Result'
-import { End } from './End'
-import './App.css'
+import React, { useState } from "react";
+import { Quiz } from "./Quiz";
+import { Intro } from "./Intro";
+import { Result } from "./Result";
+import { End } from "./End";
+import ResultWrapper from "./ResultWrapper.tsx"; 
+import "./App.css";
 
 const App = () => {
-
   const [gamestate, setGamestate] = useState("INTRO");
-  
+
   const [score, setScore] = useState<number | null>(null);
   const [compasScore, setCompasScore] = useState<number | null>(null);
   const [falsePositive, setFalsePositive] = useState<number | null>(null);
@@ -16,60 +16,87 @@ const App = () => {
   const [truePositive, setTruePositive] = useState<number | null>(null);
   const [trueNegative, setTrueNegative] = useState<number | null>(null);
 
+  const [trial1Score, setTrial1Score] = useState<number | null>(null);
+  const [trial2Score, setTrial2Score] = useState<number | null>(null);
+
   return (
     <>
       {(() => {
-        switch(gamestate) {
+        switch (gamestate) {
           case "INTRO":
-            return <Intro setGamestate={setGamestate} />
+            return <Intro setGamestate={setGamestate} />;
           case "QUIZ1":
-            return <Quiz
-              mode="NOT_HIDDEN"
-              setGamestate = {setGamestate}
-              setScore = {setScore}
-              setCompasScore = {setCompasScore}
-              setFalsePositive = {setFalsePositive}
-              setFalseNegative = {setFalseNegative}
-              setTruePositive = {setTruePositive}
-              setTrueNegative = {setTrueNegative}
-            />
+            return (
+              <Quiz
+                mode="HIDDEN"
+                setGamestate={setGamestate}
+                setScore={setScore}
+                setCompasScore={setCompasScore}
+                setFalsePositive={setFalsePositive}
+                setFalseNegative={setFalseNegative}
+                setTruePositive={setTruePositive}
+                setTrueNegative={setTrueNegative}
+              />
+            );
           case "RESULT1":
-            return <Result 
-              final={false}
-              score = {score}
-              setGamestate = {setGamestate}
-              compasScore = {compasScore}
-              falsePositive = {falsePositive}
-              falseNegative = {falseNegative}
-              truePositive = {truePositive}
-              trueNegative = {trueNegative}
-            />
+            return (
+              <ResultWrapper
+                final={false}
+                score={score}
+                setTrialScore={setTrial1Score}
+                setGamestate={setGamestate}
+                compasScore={compasScore}
+                falsePositive={falsePositive}
+                falseNegative={falseNegative}
+                truePositive={truePositive}
+                trueNegative={trueNegative}
+                onNextTrial={() => {
+                  setTrial1Score(score);
+                  setGamestate("QUIZ2");
+                }}
+              />
+            );
           case "QUIZ2":
-            return <Quiz
-              mode="HIDDEN"
-              setGamestate = {setGamestate}
-              setScore = {setScore}
-              setCompasScore = {setCompasScore}
-              setFalsePositive = {setFalsePositive}
-              setFalseNegative = {setFalseNegative}
-              setTruePositive = {setTruePositive}
-              setTrueNegative = {setTrueNegative}
-            />
+            return (
+              <Quiz
+                mode="NOT_HIDDEN"
+                setGamestate={setGamestate}
+                setScore={setScore}
+                setCompasScore={setCompasScore}
+                setFalsePositive={setFalsePositive}
+                setFalseNegative={setFalseNegative}
+                setTruePositive={setTruePositive}
+                setTrueNegative={setTrueNegative}
+              />
+            );
           case "RESULT2":
-            return <Result 
-              final
-              setGamestate = {setGamestate}
-              score = {score}
-              compasScore = {compasScore}
-              falsePositive = {falsePositive}
-              falseNegative = {falseNegative}
-              truePositive = {truePositive}
-              trueNegative = {trueNegative}
-            />
+            return (
+              <ResultWrapper
+                final={true}
+                score={score}
+                setTrialScore={setTrial2Score}
+                setGamestate={setGamestate}
+                compasScore={compasScore}
+                falsePositive={falsePositive}
+                falseNegative={falseNegative}
+                truePositive={truePositive}
+                trueNegative={trueNegative}
+                onNextTrial={() => {
+                  setGamestate("END");
+                }}
+              />
+            );
           case "END":
-            return <End setGamestate={setGamestate} />
+            return (
+              <End
+                setGamestate={setGamestate}
+                trial1Score={trial1Score}
+                trial2Score={trial2Score}
+              />
+            );
+          default:
+            return <p>CRITICAL: INVALID GAMESTATE</p>;
         }
-        return <p> CRITICAL: INVALID GAMESTATE </p>;
       })()}
     </>
   );
