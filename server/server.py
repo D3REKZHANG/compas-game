@@ -63,6 +63,10 @@ def random_case():
 
         cursor.execute("SELECT screening_date, type_of_assessment, decile_score, raw_score, assessment_reason, rec_supervision_level_text FROM compas WHERE person_id=?;", (person_id,))
         compas = [dict(zip([desc[0] for desc in cursor.description], row)) for row in cursor.fetchall()]
+        
+        if len(list(filter(lambda x: x["type_of_assessment"] == "Risk of Recidivism", compas))) == 0:
+            print(f'No risk of recid compas assessment for {person_id}')
+            continue
 
         break
 
