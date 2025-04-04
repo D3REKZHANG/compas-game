@@ -7,7 +7,7 @@ import './App.css'
 
 const App = () => {
 
-  const [gamestate, setGamestate] = useState("RESULT");
+  const [gamestate, setGamestate] = useState("INTRO");
   
   const [score, setScore] = useState<number | null>(null);
   const [compasScore, setCompasScore] = useState<number | null>(null);
