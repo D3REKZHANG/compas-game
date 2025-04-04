@@ -3,11 +3,13 @@ import { Quiz } from "./Quiz";
 import { Intro } from "./Intro";
 import { Result } from "./Result";
 import { End } from "./End";
-import ResultWrapper from "./ResultWrapper.tsx"; 
+import ResultWrapper from "./ResultWrapper.tsx";
 import "./App.css";
+import { Menu } from "./Menu";
+import { References } from "./References"
 
 const App = () => {
-  const [gamestate, setGamestate] = useState("INTRO");
+  const [gamestate, setGamestate] = useState("MENU");
 
   const [score, setScore] = useState<number | null>(null);
   const [compasScore, setCompasScore] = useState<number | null>(null);
@@ -23,6 +25,10 @@ const App = () => {
     <>
       {(() => {
         switch (gamestate) {
+          case "MENU":
+            return <Menu setGamestate={setGamestate} />;
+          case "REFERENCES":
+            return <References setGamestate={setGamestate} />;
           case "INTRO":
             return <Intro setGamestate={setGamestate} />;
           case "QUIZ1":

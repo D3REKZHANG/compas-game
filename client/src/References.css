@@ -1,0 +1,11 @@
+.references {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.reference {
+  display: block;
+  margin-bottom: 10px;
+  text-indent: -40px; /* Negative indent to create hanging indent */
+  padding-left: 40px; /* Pushes the rest of the text back into place */
+}
