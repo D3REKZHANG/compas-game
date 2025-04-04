@@ -68,7 +68,7 @@ const format = (date: string) => {
 
 export const fetchData = async (): Promise<ParsedData | null> => {
   try {
-    const response = await fetch("http://198.46.160.230:5010/random-case");
+    const response = await fetch("https://compas-api.derekzhang.ca/random-case");
     const jsonData = await response.json();
 
     // Parse the data into a single dictionary structure

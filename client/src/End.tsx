@@ -105,7 +105,7 @@ const End: React.FC<EndProps> = ({ setGamestate, trial1Score, trial2Score }) => 
         </p>
         <p>Juleen Chen, Rohit Krishna, Derek Zhang</p>
         <button onClick={() => setPage(page - 1)}>Back</button>
-        <button onClick={() => setGamestate("INTRO")}>Home</button>
+        <button onClick={() => setGamestate("MENU")}>Home</button>
       </>
     );
   }
