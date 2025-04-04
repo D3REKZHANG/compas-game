@@ -30,33 +30,36 @@ const Quiz = (props) => {
 
   const [data, setData] = useState<ParsedData | null>(null);
   const [scoreInput, setScoreInput] = useState<number>(null);
-  const [detain, setDetain] = useState<boolean | null>(null); // Track detain value
+  const [detain, setDetain] = useState<boolean | null>(null);
   const [caseNumber, setCaseNumber] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const [showResultPopup, setShowResultPopup] = useState(false);
   const [lastDecision, setLastDecision] = useState<{
-    reoffended: boolean;
-    released: boolean;
+    reoffended: boolean | null;
+    released: boolean | null;
   }>({ reoffended: null, released: null });
+
+  // Timer states
+  const [timeLeft, setTimeLeft] = useState(20);
+  const [timedOut, setTimedOut] = useState(false);
 
   const getData = async () => {
     setLoading(true);
     const fetchedData = await fetchData();
     setData(fetchedData);
     setLoading(false);
-
+    // Here we no longer reset timeLeft/timedOut because we do that in the popup click handler
     window.scroll({ top: 0, left: 0, behavior: "smooth" });
   };
 
-  // Fetch the data on component mount
+  // On mount, start game.
   useEffect(() => {
-    handleResetGame(); 
+    handleResetGame();
   }, []);
-  
 
+  // Update global scores when new data arrives.
   useEffect(() => {
-    // Fetch the scores and rates whenever they change
     setScore(getScore());
     setCompasScore(getCompasScore());
     setFalsePositive(getFalsePositiveRate());
@@ -65,27 +68,95 @@ const Quiz = (props) => {
     setTrueNegative(getTrueNegativeRate());
   }, [data]);
 
+  // Timer effect: counts down unless popup is visible.
   useEffect(() => {
-    if (!showResultPopup && lastDecision.released !== null) {
-      if (caseNumber === NUM_CASES) {
-        setGamestate(mode === "HIDDEN" ? "RESULT1" : "RESULT2" );
-      } else {
-        setCaseNumber((num) => num + 1);
-        getData();
+    if (showResultPopup) return;
+    if (timeLeft <= 0) {
+      if (!timedOut) {
+        setTimedOut(true);
+        handleTimeoutScore(); // ✅ Now we safely update compas-only score
+        setLastDecision({ reoffended: null, released: null });
+        setShowResultPopup(true);
       }
-
-      // Reset to prevent re-trigger
-      setLastDecision({ released: null, reoffended: null });
-      setScoreInput(null);
-      setDetain(null);
+      return;
     }
-  }, [showResultPopup]);
+    const timerId = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timerId);
+  }, [timeLeft, showResultPopup, timedOut]);
+  
+
+  // Explicit popup click handler.
+  const handlePopupClick = () => {
+    // Reset timer and decision state before moving on.
+    setTimeLeft(20);
+    setTimedOut(false);
+    setLastDecision({ reoffended: null, released: null });
+    setScoreInput(null);
+    setDetain(null);
+    setShowResultPopup(false);
+
+    if (caseNumber < NUM_CASES) {
+      setCaseNumber((prev) => prev + 1);
+      getData();
+    } else {
+      setGamestate(mode === "HIDDEN" ? "RESULT1" : "RESULT2");
+    }
+  };
 
   const handleScoreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setScoreInput(parseInt(event.target.value));
   };
 
+  const handleTimeoutScore = () => {
+    const recidivismAssessment = data?.compas.slice().reverse().find(
+      (assessment) => assessment.type_of_assessment === "Risk of Recidivism"
+    );
+  
+    if (!recidivismAssessment) {
+      console.warn("Risk of Recidivism assessment not found during timeout.");
+      return;
+    }
+  
+    const compasScore = recidivismAssessment.decile_score;
+    const reoffended = data?.is_recid === 1;
+  
+    // Assume default user score = 0
+    updateScore(0, compasScore, null, null, true);
+
+    setScore(getScore());
+    setCompasScore(getCompasScore());
+    setFalsePositive(getFalsePositiveRate());
+    setFalseNegative(getFalseNegativeRate());
+    setTruePositive(getTruePositiveRate());
+    setTrueNegative(getTrueNegativeRate());
+  };
+  
   const handleUpdateScore = () => {
+    const recidivismAssessment = data.compas.slice().reverse().find(
+      (assessment) =>
+        assessment.type_of_assessment === "Risk of Recidivism"
+    );
+  
+    if (!recidivismAssessment) {
+      alert("Risk of Recidivism assessment not found.");
+      return;
+    }
+  
+    const compasScore = recidivismAssessment.decile_score;
+    const reoffended = data.is_recid === 1;
+    console.log("In updateScore", score, compasScore, detain, data.is_recid);
+
+  
+    // If timed out, still update compas score via updateScore with score = 0, and return early
+    if (timedOut) {
+      updateScore(0, compasScore, false, reoffended, true); // true = skip
+      setScore(getScore());
+      setCompasScore(getCompasScore());
+      return;
+    }
+  
     const numScore = Number(scoreInput);
     if (isNaN(numScore)) {
       alert("Please enter a valid number.");
@@ -95,54 +166,64 @@ const Quiz = (props) => {
       alert("Please select a detain option (True or False).");
       return;
     }
-
-    const recidivismAssessment = data.compas.reverse().find(
-      (assessment) => assessment.type_of_assessment === "Risk of Recidivism"
-    );
-
-    if (!recidivismAssessment) {
-      alert("Risk of Recidivism assessment not found.");
-      return;
-    }
-
-    const compasScore = recidivismAssessment.decile_score;
-    const reoffended = data.is_recid === 1;
+  
     const released = !detain;
-
-    updateScore(numScore, compasScore, detain, reoffended);
+  
+    updateScore(numScore, compasScore, detain, reoffended, false);
     setScore(getScore());
+    setCompasScore(getCompasScore());
     setFalsePositive(getFalsePositiveRate());
     setFalseNegative(getFalseNegativeRate());
     setTruePositive(getTruePositiveRate());
     setTrueNegative(getTrueNegativeRate());
-
+  
     setLastDecision({ released, reoffended });
     setShowResultPopup(true);
-  };
+  };  
+  
 
   const handleResetGame = () => {
-      setCaseNumber(1);
-      resetGame();
-      setScore(0);
-      setCompasScore(0);
-      setFalsePositive(0);
-      setFalseNegative(0);
-      setTruePositive(0);
-      setTrueNegative(0);
-      getData();
-  }
+    setCaseNumber(1);
+    resetGame();
+    setScore(0);
+    setCompasScore(0);
+    setFalsePositive(0);
+    setFalseNegative(0);
+    setTruePositive(0);
+    setTrueNegative(0);
+    // Also reset timer state.
+    setTimeLeft(20);
+    setTimedOut(false);
+    getData();
+  };
 
   if (!data) {
     return <div>Loading...</div>;
   }
 
-  // Render the fetched data
   return (
     <div>
       <h1>COMPAS Game</h1>
 
+      {/* Floating timer */}
+      <div
+        style={{
+          position: "fixed",
+          top: "10px",
+          left: "10px",
+          backgroundColor: "rgba(0,0,0,0.7)",
+          color: "white",
+          padding: "5px 10px",
+          borderRadius: "5px",
+          zIndex: 1000,
+        }}
+      >
+        {timeLeft}s
+      </div>
+
       <h2>
-        Case #{caseNumber}{mode !== "HIDDEN" && ` - ${data.demographics.name}`}
+        Case #{caseNumber}
+        {mode !== "HIDDEN" && ` - ${data.demographics.name}`}
       </h2>
 
       <div className="demographics-list">
@@ -162,7 +243,7 @@ const Quiz = (props) => {
               <li key={index}>
                 <strong>Charge:</strong> {charge.charge}
                 <br />
-                <strong>Degree</strong> {charge.charge_degree}
+                <strong>Degree:</strong> {charge.charge_degree}
                 <br />
                 <strong>Date:</strong> {charge.offense_date}
               </li>
@@ -188,6 +269,7 @@ const Quiz = (props) => {
           <p>No jail history available.</p>
         )}
       </div>
+
       <div className="list-container">
         <h2>Prison History</h2>
         {data.prisonhistory.length > 0 ? (
@@ -206,14 +288,13 @@ const Quiz = (props) => {
       </div>
 
       <div className="score-container">
-        <strong>Your Score:</strong> {!isNaN(score) ? score : 0}
+        <strong>Your Score:</strong> {isNaN(score) ? 0 : score}
       </div>
-          
+
       <div className="judge-section">
         Risk Score
         <div className="rating-section">
           <div className="rating-grid">
-            {/* Low Risk */}
             {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
               <div
                 key={num}
@@ -223,10 +304,8 @@ const Quiz = (props) => {
                 {num}
               </div>
             ))}
-            {/* High Risk*/}
           </div>
         </div>
-        {/* Buttons for setting detain value */}
         <div className="detain-section">
           <div
             className={`detain-box ${detain ? "selected" : ""}`}
@@ -241,27 +320,35 @@ const Quiz = (props) => {
             Release
           </div>
         </div>
-        <button disabled={loading} onClick={handleUpdateScore}>
+        <button disabled={loading || timedOut} onClick={handleUpdateScore}>
           Submit
         </button>
         {showResultPopup && (
-          <div
-            className="result-popup"
-            onClick={() => setShowResultPopup(false)}
-          >
+          <div className="result-popup" onClick={handlePopupClick}>
             <div className="popup-content">
-              <h2>Case Outcome</h2>
-              <p>
-                <strong>You chose to:</strong>{" "}
-                {lastDecision.released ? "Release" : "Detain"}
-              </p>
-              <p>
-                <strong>They actually:</strong>{" "}
-                {lastDecision.reoffended ? "Reoffended" : "Did not reoffend"}
-              </p>
-              <p style={{ marginTop: "12px", fontStyle: "italic" }}>
-                (Click this window to continue)
-              </p>
+              {timedOut ? (
+                <>
+                  <h2>Time's up!</h2>
+                  <p style={{ marginTop: "12px", fontStyle: "italic" }}>
+                    (Click this window to continue)
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2>Case Outcome</h2>
+                  <p>
+                    <strong>You chose to:</strong>{" "}
+                    {lastDecision.released ? "Release" : "Detain"}
+                  </p>
+                  <p>
+                    <strong>They actually:</strong>{" "}
+                    {lastDecision.reoffended ? "Reoffended" : "Did not reoffend"}
+                  </p>
+                  <p style={{ marginTop: "12px", fontStyle: "italic" }}>
+                    (Click this window to continue)
+                  </p>
+                </>
+              )}
             </div>
           </div>
         )}
