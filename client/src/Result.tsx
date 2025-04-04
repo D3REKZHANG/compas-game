@@ -22,27 +22,27 @@ const Result = (props) => {
         <li><strong>False Negatives:</strong> {falseNegative} </li>
       </ul>
 
-      {(score >= compasScore + 2) && <p>
-        Your predictions during this trial exceeded those of COMPAS. Your accuracy ({score}) outmatched COMPAS’s accuracy overall ({compasScore}). These results indicate your capability to counteract demographic biases that might otherwise occur.
+      {(score > compasScore + 5) && <p>
+        Your predictions during this trial exceeded those of COMPAS. Your accuracy score of ({score}) outmatched COMPAS’s accuracy score of ({compasScore}). These results indicate your capability to counteract demographic biases that might otherwise occur.
       </p>}
-      {(score <= compasScore - 2) && <p>
-        The trial results showed that COMPAS achieved better accuracy in comparison. Your accuracy ({score}) was lower than COMPAS’s accuracy overall ({compasScore}). Algorithmic predictions with demographic information sometimes show better consistency than human judgments although their consistency introduces new biases to the results.
+      {(score < compasScore - 5) && <p>
+        The trial results showed that COMPAS achieved better accuracy in comparison. Your accuracy score of ({score}) was lower than COMPAS’s accuracy score of ({compasScore}). Algorithmic predictions with demographic information sometimes show better consistency than human judgments although their consistency introduces new biases to the results.
       </p>}
-      {(Math.abs(score - compasScore) < 2) && <p>
-        The results of your predictions matched those of COMPAS. Your prediction accuracy for reoffenders and non-reoffenders along with the algorithm mirrors each other which shows demographic data had equivalent effects on your judgment and the algorithm's predictions. The matching observations prompt questions regarding what extent human and AI predictions are influenced by the same data.
+      {(Math.abs(score - compasScore) <= 5) && <p>
+        The results of your predictions matched those of COMPAS. Your prediction accuracy for reoffenders and non-reoffenders mirrors COMPAS, which shows demographic data had equivalent effects on your judgment and the algorithm's predictions. The matching observations prompt questions regarding what extent human and AI predictions are influenced by the same data.
       </p>}
 
       {(falsePositive > falseNegative) && <p>
-        Your assessments showed a tendency to be cautious by incorrectly detaining more non-reoffenders (false positives). Comparatively, you mistakenly released high-risk individuals who later reoffended at a lower rate (false negatives). Your strategy is conservative regarding risks, yet leads to potentially unnecessarily detaining defendants. Determine if this matches your tolerance for risk and principles of fairness.
+        Your assessments showed a tendency to be cautious by incorrectly detaining more non-reoffenders (more false positives). Comparatively, you correctly detained more reoffenders and released reoffendeders at a lower rate (less false negatives). Your strategy is conservative regarding risks, yet leads to potentially unnecessarily detaining defendants. Determine if this matches your tolerance for risk and principles of fairness.
       </p>}
       {(falsePositive < falseNegative ) && <p>
-        Your assessments showed a tendency to be lenient by mistakenly releasing more high-risk individuals who later reoffended (false negatives). Comparatively, you incorrectly detained non-reoffenders at a lower rate (false positives). Your strategy results in less people being unnecessarily detained, but could pose safety risks. Determine if this matches your tolerance for risk and principles of fairness.
+        Your assessments showed a tendency to be lenient by mistakenly releasing more reoffendeders (more false negatives). Comparatively, you correctly released more non-reoffenders and detained non-reoffenders at a lower rate (less false positives). Your strategy results in less people being unnecessarily detained, but could pose safety risks. Determine if this matches your tolerance for risk and principles of fairness.
       </p>}
       {(falsePositive == falseNegative) && <p>
         Your assessment method maintained a balanced approach and resulted in equal amounts of false positives and false negatives. The assessment strategy shows neutrality when judging risk while demonstrating how difficult it is to make exact predictions in unpredictable situations.
       </p>}
 
-      {!final && <p> For Trial 2, we are going to reveal <strong> race demographics </strong> as well </p>}
+      {!final && <p> For Trial 2, we are going to reveal the <strong> name and race demographics </strong> as well </p>}
 
       {final ?
         <button onClick={() => setGamestate("END")}> Continue </button> :
