@@ -96,7 +96,7 @@ const Quiz = (props) => {
       return;
     }
 
-    const recidivismAssessment = data.compas.find(
+    const recidivismAssessment = data.compas.reverse().find(
       (assessment) => assessment.type_of_assessment === "Risk of Recidivism"
     );
 
