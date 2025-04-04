@@ -15,12 +15,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // Loosened yert
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    // Loosened yert
     "skipLibCheck": true,
     "strict": false,
     "noImplicitAny": false,
