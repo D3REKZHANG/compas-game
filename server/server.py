@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS, cross_origin
 import sqlite3, random
 
@@ -96,6 +96,50 @@ def random_case():
 
     response = jsonify(data)
     return response
+
+@app.route("/leaderboard", methods=["GET"])
+@cross_origin()
+def leaderboard():
+    try:
+        t = request.args.get('type')
+    except ValueError:
+        abort(400, 'No type provided')
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(f"SELECT name, score FROM leaderboard{t} ORDER BY score DESC, id ASC LIMIT 10;")
+
+    data  = [dict(zip([desc[0] for desc in cursor.description], row)) for row in cursor.fetchall()]
+    conn.close()
+
+    return jsonify(data)
+
+@app.route("/leaderboard", methods=["PUT"])
+@cross_origin()
+def update_leaderboard():
+    try:
+        t = request.args.get('type')
+    except ValueError:
+        abort(400, 'No type provided')
+
+    req = request.get_json()
+    if not req:
+        abort(400, 'Missing request body');
+    name = req.get('name')
+    score = req.get('score')
+    if not name or not score:
+        abort(400, 'Missing name or score');
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(f"INSERT INTO leaderboard{t} (name, score) VALUES (?, ?)", (name, score))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify("Success", 200)
 
 if __name__ == "__main__":
     app.run(debug=True)
