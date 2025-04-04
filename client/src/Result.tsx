@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 
 const Result = (props) => {
   const { final, setGamestate, score, compasScore, falsePositive, falseNegative, truePositive, trueNegative } = props;
-  const nonreoffenders = falsePositive + trueNegative;
-  const reoffenders = falseNegative + truePositive;
 
   useEffect(() => {
 
@@ -14,14 +12,14 @@ const Result = (props) => {
     <div>
       <h1> COMPAS Game </h1>
 
-      <h2>Results</h2>
+      <h2>Trial {(final) ? "2" : "1"} Results</h2>
       <ul>
         <li><strong>Your Score:</strong> {score} </li>
         <li><strong>Compas Score:</strong> {compasScore} </li>
-        <li><strong>False Positive Rate:</strong> {falsePositive/nonreoffenders * 100} <strong>%</strong></li>
-        <li><strong>False Negative Rate:</strong> {falseNegative/reoffenders * 100} <strong>%</strong></li>
-        <li><strong>True Positive Rate:</strong> {truePositive/reoffenders * 100} <strong>%</strong></li>
-        <li><strong>True Negative Rate:</strong> {trueNegative/nonreoffenders * 100} <strong>%</strong></li>
+        <li><strong>True Positives:</strong> {truePositive} </li>
+        <li><strong>False Positives:</strong> {falsePositive} </li>
+        <li><strong>True Negatives:</strong> {trueNegative} </li>
+        <li><strong>False Negatives:</strong> {falseNegative} </li>
       </ul>
 
       {(score >= compasScore + 2) && <p>
@@ -43,6 +41,8 @@ const Result = (props) => {
       {(falsePositive == falseNegative) && <p>
         Your assessment method maintained a balanced approach and resulted in equal amounts of false positives and false negatives. The assessment strategy shows neutrality when judging risk while demonstrating how difficult it is to make exact predictions in unpredictable situations.
       </p>}
+
+      {!final && <p> For Trial 2, we are going to reveal <strong> race demographics </strong> as well </p>}
 
       {final ?
         <button onClick={() => setGamestate("END")}> Continue </button> :

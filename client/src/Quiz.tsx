@@ -152,31 +152,6 @@ const Quiz = (props) => {
           <li>Sex: {data.demographics.sex}</li>
         </ul>
       </div>
-      {/*
-      <h2>Compas Assessments</h2>
-      {data.compas.length > 0 ? (
-        <ul>
-          {data.compas.map((assessment, index) => (
-            <li key={index}>
-              <strong>Assessment Reason:</strong> {assessment.assessment_reason}
-              <br />
-              <strong>Decile Score:</strong> {assessment.decile_score}
-              <br />
-              <strong>Raw Score:</strong> {assessment.raw_score}
-              <br />
-              <strong>Rec Supervision Level:</strong>{" "}
-              {assessment.rec_supervision_level_text}
-              <br />
-              <strong>Screening Date:</strong> {assessment.screening_date}
-              <br />
-              <strong>Type of Assessment:</strong>{" "}
-              {assessment.type_of_assessment}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No compas assessments available.</p>
-      )} */}
 
       <div className="list-container">
         <h2>Previous Charges</h2>
@@ -229,91 +204,6 @@ const Quiz = (props) => {
           <p>No prison history available.</p>
         )}
       </div>
-
-      {/*
-      <h2>Recidivism Type Info</h2>
-      <ul>
-        <li>Is Recidivist: {data.is_recid === 1 ? "Yes" : "No"}</li>
-        <li>
-          Is Violent Recidivist: {data.is_violent_recid === 1 ? "Yes" : "No"}
-        </li>
-      </ul>
-
-      <h2>Recidivism Info</h2>
-      {data.recid_info ? (
-        <ul>
-          <li>
-            <strong>Number of Recidivism Cases:</strong>{" "}
-            {data.recid_info.num_r_cases}
-          </li>
-          <li>
-            <strong>Case Number:</strong> {data.recid_info.r_case_number}
-          </li>
-          <li>
-            <strong>Charge Degree:</strong> {data.recid_info.r_charge_degree}
-          </li>
-          <li>
-            <strong>Charge Description:</strong> {data.recid_info.r_charge_desc}
-          </li>
-          <li>
-            <strong>Days from Arrest:</strong>{" "}
-            {data.recid_info.r_days_from_arrest || "N/A"}
-          </li>
-          <li>
-            <strong>Jail In:</strong> {data.recid_info.r_jail_in || "N/A"}
-          </li>
-          <li>
-            <strong>Jail Out:</strong> {data.recid_info.r_jail_out || "N/A"}
-          </li>
-          <li>
-            <strong>Offense Date:</strong> {data.recid_info.r_offense_date}
-          </li>
-        </ul>
-      ) : (
-        <p>No recidivism information available.</p>
-      )}
-
-      <h2>Violent Recidivism Info</h2>
-      {data.violent_recid_info ? (
-        <ul>
-          <li>
-            <strong>Number of Violent Recidivism Cases:</strong>{" "}
-            {data.violent_recid_info.num_vr_cases}
-          </li>
-          <li>
-            <strong>Case Number:</strong>{" "}
-            {data.violent_recid_info.vr_case_number}
-          </li>
-          <li>
-            <strong>Charge Degree:</strong>{" "}
-            {data.violent_recid_info.vr_charge_degree}
-          </li>
-          <li>
-            <strong>Charge Description:</strong>{" "}
-            {data.violent_recid_info.vr_charge_desc}
-          </li>
-          <li>
-            <strong>Offense Date:</strong>{" "}
-            {data.violent_recid_info.vr_offense_date}
-          </li>
-        </ul>
-      ) : (
-        <p>No violent recidivism information available.</p>
-      )}
-      */}
-      {/* Display the Score, False Positive Rate, and False Negative Rate */}
-      {/*
-    <h2>Metrics</h2>
-      <ul>
-        <li><strong>Score:</strong> {score}</li>
-        <li><strong>Compas Score:</strong> {compasScore}</li>
-        <li><strong>False Positive Rate:</strong> {falsePositive}</li>
-        <li><strong>False Negative Rate:</strong> {falseNegative}</li>
-        <li><strong>True Positive Rate:</strong> {truePositive}</li>
-        <li><strong>True Negative Rate:</strong> {trueNegative}</li>
-        <li><strong>Detain:</strong> {detain === null ? "Detain not selected" : detain ? "Detain" : "Don't Detain"}</li>
-      </ul>
-      */}
 
       <div className="judge-section">
         Risk Score
@@ -371,11 +261,6 @@ const Quiz = (props) => {
             </div>
           </div>
         )}
-        {/* 
-      <div>
-        <button onClick={handleResetGame}>New Game</button>
-      </div>
-      */}
       </div>
     </div>
   );
