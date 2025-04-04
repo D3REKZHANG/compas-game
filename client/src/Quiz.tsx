@@ -16,6 +16,8 @@ import {
 
 import './Quiz.css';
 
+const NUM_CASES = 10;
+
 const Quiz = (props) => {
   const { mode, setGamestate, setScore, setCompasScore, setFalsePositive, setFalseNegative, setTruePositive, setTrueNegative } = props;
 
@@ -85,7 +87,7 @@ const Quiz = (props) => {
       alert("Risk of Recidivism assessment not found.");
     }
 
-    if(caseNumber === 3) {
+    if(caseNumber === NUM_CASES) {
       setGamestate((mode === "HIDDEN") ? "RESULT2" : "RESULT1");
     }
     setCaseNumber((num) => num+1);
