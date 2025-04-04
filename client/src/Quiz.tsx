@@ -19,6 +19,7 @@ const Quiz = (props) => {
   const {
     mode,
     setGamestate,
+    score,
     setScore,
     setCompasScore,
     setFalsePositive,
@@ -141,7 +142,7 @@ const Quiz = (props) => {
       <h1>COMPAS Game</h1>
 
       <h2>
-        Case #{caseNumber} - {data.demographics.name}
+        Case #{caseNumber}{mode !== "HIDDEN" && ` - ${data.demographics.name}`}
       </h2>
 
       <div className="demographics-list">
@@ -187,7 +188,6 @@ const Quiz = (props) => {
           <p>No jail history available.</p>
         )}
       </div>
-
       <div className="list-container">
         <h2>Prison History</h2>
         {data.prisonhistory.length > 0 ? (
@@ -205,6 +205,10 @@ const Quiz = (props) => {
         )}
       </div>
 
+      <div className="score-container">
+        <strong>Your Score:</strong> {!isNaN(score) ? score : 0}
+      </div>
+          
       <div className="judge-section">
         Risk Score
         <div className="rating-section">

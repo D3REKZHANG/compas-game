@@ -30,6 +30,7 @@ const App = () => {
               <Quiz
                 mode="HIDDEN"
                 setGamestate={setGamestate}
+                score={score}
                 setScore={setScore}
                 setCompasScore={setCompasScore}
                 setFalsePositive={setFalsePositive}
@@ -61,6 +62,7 @@ const App = () => {
               <Quiz
                 mode="NOT_HIDDEN"
                 setGamestate={setGamestate}
+                score={score}
                 setScore={setScore}
                 setCompasScore={setCompasScore}
                 setFalsePositive={setFalsePositive}
