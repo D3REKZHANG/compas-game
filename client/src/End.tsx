@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  getScore,
-  getCompasScore,
-  getFalsePositiveRate,
-  getFalseNegativeRate,
-  getTruePositiveRate,
-  getTrueNegativeRate,
-} from "./AppData";
+import './End.css'
 
 interface EndProps {
   setGamestate: React.Dispatch<React.SetStateAction<string>>;
@@ -16,12 +9,35 @@ interface EndProps {
 
 const End: React.FC<EndProps> = ({ setGamestate, trial1Score, trial2Score }) => {
   const [page, setPage] = useState(0);
-  const finalScore = getScore();
-  const finalCompas = getCompasScore();
-  const falsePos = getFalsePositiveRate();
-  const falseNeg = getFalseNegativeRate();
-  const truePos = getTruePositiveRate();
-  const trueNeg = getTrueNegativeRate();
+  const [name, setName] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const submitScore = async () => {
+    try {
+      const res1 = await fetch("https://compas-api.derekzhang.ca/leaderboard?type=1", {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({ name, score: trial1Score || 20 })
+      });
+
+      if (!res1.ok) {
+        throw new Error(`Failed to update leaderboard1. Received ${res1.status}`);
+      }
+
+      const res2 = await fetch("https://compas-api.derekzhang.ca/leaderboard?type=2", {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({ name, score: trial2Score || 20 })
+      });
+
+      if (!res2.ok) {
+        throw new Error(`Failed to update leaderboard2. Received ${res2.status}`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+     setSubmitted(true);
+  }
 
   let content;
 
@@ -48,6 +64,21 @@ const End: React.FC<EndProps> = ({ setGamestate, trial1Score, trial2Score }) => 
           </li>
         </ul>
         <p>{comparisonText}</p>
+
+        <p> Would you like to submit these scores to the leaderboard? </p>
+
+        <div className="submit-section">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Your Name"
+            maxLength={20}
+            disabled={submitted}
+          />
+          <button disabled={name === "" || submitted} onClick={submitScore}> Submit </button>
+        </div>
+
+
         <button onClick={() => setPage(page + 1)}>Next</button>
       </>
     );
