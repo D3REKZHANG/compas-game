@@ -212,10 +212,11 @@ const Quiz = (props) => {
           top: "10px",
           left: "10px",
           backgroundColor: "rgba(0,0,0,0.7)",
-          color: "white",
+          color: (timeLeft < 5) ? "#ff9999" : "white",
           padding: "5px 10px",
           borderRadius: "5px",
           zIndex: 1000,
+          fontSize: 30,
         }}
       >
         {timeLeft}s
