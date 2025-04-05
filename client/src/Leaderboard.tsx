@@ -23,21 +23,26 @@ const LeaderboardScreen = ({ setGamestate }) => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>
+      <h1> COMPAS Game </h1>
+      <button onClick={() => setGamestate("MENU")}> Back </button>
+      <p> Loading... </p>
+    </div>;
   }
 
   return (
     <div>
       <h1> COMPAS Game </h1>
-      <button onClick={() => setGamestate("MENU")}> Home </button>
+      <button onClick={() => setGamestate("MENU")}> Back </button>
       <div className="leaderboard-container">
         {/* Leaderboard 1 */}
         <div className="leaderboard-box">
-          <h2>Recidivism Quiz Leaderboard <br/> No Demographic Data</h2>
+          <h2>Trial 1 Leaderboard <br/> (No Demographic Data)</h2>
           <ul className="leaderboard-list">
             {leaderboard1.map(([name, score], index) => (
               <li key={index}>
-                {index + 1}. {name}: {score}
+                <p> {index + 1}. {name} </p>
+                <p> {score} </p>
               </li>
             ))}
           </ul>
@@ -45,7 +50,7 @@ const LeaderboardScreen = ({ setGamestate }) => {
 
         {/* Leaderboard 2 */}
         <div className="leaderboard-box">
-          <h2>Recidivism Quiz Leaderboard <br/> With Demographic Data</h2>
+          <h2>Trial 2 Leaderboard <br/> (With Demographic Data)</h2>
           <ul className="leaderboard-list">
             {leaderboard2.map(([name, score], index) => (
               <li key={index}>

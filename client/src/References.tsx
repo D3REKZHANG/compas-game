@@ -5,9 +5,9 @@ const References = ({ setGamestate }) => {
   return (
     <div>
       <h1> COMPAS Game </h1>
-      <button onClick={() => setGamestate("MENU")}> Home </button>
-      <h2>References</h2>
-      <p class="references">
+      <button onClick={() => setGamestate("MENU")}> Back </button>
+      <p>References</p>
+      <p className="references">
         <span class="reference">Andrews, D. A., Bonta, J., & Hoge, R. D. (1990). Classification for effective rehabilitation: Rediscovering psychology. <i>Criminal Justice and Behavior, 17</i>(1), 19–52. 
           <a href="https://doi.org/10.1177/0093854890017001004" target="_blank">https://doi.org/10.1177/0093854890017001004</a></span><br />
 
@@ -48,9 +48,9 @@ const References = ({ setGamestate }) => {
 
         <span class="reference">Zhang, Y., Cui, L., Bi, W., & Shi, S. (2024). Alleviating hallucinations of large language models through induced hallucinations. <i>arXiv.</i> 
           <a href="https://arxiv.org/abs/2312.15710" target="_blank">https://arxiv.org/abs/2312.15710</a></span>
-      </p>
-      <p>
-        Image From https://www.istockphoto.com/vector/concept-of-judge-gm1404501041-456707310
+        <p>
+          Image From https://www.istockphoto.com/vector/concept-of-judge-gm1404501041-456707310
+        </p>
       </p>
     </div>
   );

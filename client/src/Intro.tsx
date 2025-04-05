@@ -24,6 +24,7 @@ const Intro = ({ setGamestate }) => {
           recidivism risk known to sometimes make biased decisions. Remember how subtle
           biases influence all your decisions during this process.
         </p>
+        <button onClick={() => setGamestate("MENU")}> Back </button>
         <button onClick={() => setState(1)}> Next </button>
       </>
       }

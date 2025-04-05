@@ -200,7 +200,7 @@ const Quiz = (props) => {
           top: "10px",
           left: "10px",
           backgroundColor: "rgba(0,0,0,0.7)",
-          color: (timeLeft < 5) ? "#ff9999" : "white",
+          color: (timeLeft <= 10) ? "#ff9999" : "white",
           padding: "5px 10px",
           borderRadius: "5px",
           zIndex: 1000,
