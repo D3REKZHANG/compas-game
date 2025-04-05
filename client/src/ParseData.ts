@@ -59,16 +59,18 @@ export type ParsedData = {
   previous_charges: Charge[];
   prisonhistory: PrisonHistory[];
   recid_info: RecidInfo | null;
-  violent_recid_info: ViolentRecidInfo | null
+  violent_recid_info: ViolentRecidInfo | null;
 };
 
 const format = (date: string) => {
-  return date?.split(' ')[0];
-}
+  return date?.split(" ")[0];
+};
 
 export const fetchData = async (): Promise<ParsedData | null> => {
   try {
-    const response = await fetch("https://compas-api.derekzhang.ca/random-case");
+    const response = await fetch(
+      "https://compas-api.derekzhang.ca/random-case"
+    );
     const jsonData = await response.json();
 
     // Parse the data into a single dictionary structure
@@ -89,21 +91,27 @@ export const fetchData = async (): Promise<ParsedData | null> => {
       },
       is_recid: jsonData.is_recid,
       is_violent_recid: jsonData.is_violent_recid,
-      jailhistory: jsonData.jailhistory.map((history: any) => ({
-        in_custody: format(history.in_custody),
-        out_custody: format(history.out_custody),
-      })).sort((a,b) => a.in_custody < b.in_custody),
-      previous_charges: jsonData.previous_charges.map((charge: any) => ({
-        charge: charge.charge,
-        charge_degree: charge.charge_degree,
-        charge_number: charge.charge_number,
-        offense_date: format(charge.offense_date),
-      })).sort((a,b) => a.offense_date < b.offense_date),
+      jailhistory: jsonData.jailhistory
+        .map((history: any) => ({
+          in_custody: format(history.in_custody),
+          out_custody: format(history.out_custody),
+        }))
+        .sort((a, b) => a.in_custody < b.in_custody),
+      previous_charges: jsonData.previous_charges
+        .map((charge: any) => ({
+          charge: charge.charge,
+          charge_degree: charge.charge_degree,
+          charge_number: charge.charge_number,
+          offense_date: format(charge.offense_date),
+        }))
+        .sort((a, b) => a.offense_date < b.offense_date),
       prisonhistory: Array.isArray(jsonData.prisonhistory)
-        ? jsonData.prisonhistory.map((history: any) => ({
-            in_custody: format(history.in_custody),
-            out_custody: format(history.out_custody),
-          })).sort((a,b) => a.in_custody < b.in_custody)
+        ? jsonData.prisonhistory
+            .map((history: any) => ({
+              in_custody: format(history.in_custody),
+              out_custody: format(history.out_custody),
+            }))
+            .sort((a, b) => a.in_custody < b.in_custody)
         : [], // If it's not an array, default to an empty array
       recid_info: jsonData.recid_info
         ? {
@@ -123,7 +131,9 @@ export const fetchData = async (): Promise<ParsedData | null> => {
             vr_case_number: jsonData.violent_recid_info.vr_case_number,
             vr_charge_degree: jsonData.violent_recid_info.vr_charge_degree,
             vr_charge_desc: jsonData.violent_recid_info.vr_charge_desc,
-            vr_offense_date: format(jsonData.violent_recid_info.vr_offense_date),
+            vr_offense_date: format(
+              jsonData.violent_recid_info.vr_offense_date
+            ),
           }
         : null,
     };

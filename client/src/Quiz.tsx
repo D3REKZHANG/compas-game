@@ -40,7 +40,7 @@ const Quiz = (props) => {
     released: boolean | null;
   }>({ reoffended: null, released: null });
 
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(45);
   const [timedOut, setTimedOut] = useState(false);
 
   const getData = async () => {
@@ -82,7 +82,7 @@ const Quiz = (props) => {
   }, [timeLeft, showResultPopup, timedOut]);
 
   const handlePopupClick = () => {
-    setTimeLeft(30);
+    setTimeLeft(45);
     setTimedOut(false);
     setLastDecision({ reoffended: null, released: null });
     setScoreInput(null);
@@ -104,18 +104,21 @@ const Quiz = (props) => {
   };
 
   const handleTimeoutScore = () => {
-    const recidivismAssessment = data?.compas.slice().reverse().find(
-      (assessment) => assessment.type_of_assessment === "Risk of Recidivism"
-    );
-  
+    const recidivismAssessment = data?.compas
+      .slice()
+      .reverse()
+      .find(
+        (assessment) => assessment.type_of_assessment === "Risk of Recidivism"
+      );
+
     if (!recidivismAssessment) {
       console.warn("Risk of Recidivism assessment not found during timeout.");
       return;
     }
-  
+
     const compasScore = recidivismAssessment.decile_score;
     const reoffended = data?.is_recid === 1;
-  
+
     updateScore(0, compasScore, null, null, true);
 
     setScore(getScore());
@@ -125,18 +128,20 @@ const Quiz = (props) => {
     setTruePositive(getTruePositiveRate());
     setTrueNegative(getTrueNegativeRate());
   };
-  
+
   const handleUpdateScore = () => {
-    const recidivismAssessment = data.compas.slice().reverse().find(
-      (assessment) =>
-        assessment.type_of_assessment === "Risk of Recidivism"
-    );
-  
+    const recidivismAssessment = data.compas
+      .slice()
+      .reverse()
+      .find(
+        (assessment) => assessment.type_of_assessment === "Risk of Recidivism"
+      );
+
     if (!recidivismAssessment) {
       alert("Risk of Recidivism assessment not found.");
       return;
     }
-  
+
     const compasScore = recidivismAssessment.decile_score;
     const reoffended = data.is_recid === 1;
     console.log("In updateScore", score, compasScore, detain, data.is_recid);
@@ -147,7 +152,7 @@ const Quiz = (props) => {
       setCompasScore(getCompasScore());
       return;
     }
-  
+
     const numScore = Number(scoreInput);
     if (isNaN(numScore)) {
       alert("Please enter a valid number.");
@@ -157,9 +162,9 @@ const Quiz = (props) => {
       alert("Please select a detain option (True or False).");
       return;
     }
-  
+
     const released = !detain;
-  
+
     updateScore(numScore, compasScore, detain, reoffended, false);
     setScore(getScore());
     setCompasScore(getCompasScore());
@@ -167,11 +172,10 @@ const Quiz = (props) => {
     setFalseNegative(getFalseNegativeRate());
     setTruePositive(getTruePositiveRate());
     setTrueNegative(getTrueNegativeRate());
-  
+
     setLastDecision({ released, reoffended });
     setShowResultPopup(true);
-  };  
-  
+  };
 
   const handleResetGame = () => {
     setCaseNumber(1);
@@ -182,7 +186,7 @@ const Quiz = (props) => {
     setFalseNegative(0);
     setTruePositive(0);
     setTrueNegative(0);
-    setTimeLeft(30);
+    setTimeLeft(45);
     setTimedOut(false);
     getData();
   };
@@ -202,7 +206,7 @@ const Quiz = (props) => {
           top: "10px",
           left: "10px",
           backgroundColor: "rgba(0,0,0,0.7)",
-          color: (timeLeft <= 10) ? "#ff9999" : "white",
+          color: timeLeft <= 10 ? "#ff9999" : "white",
           padding: "5px 10px",
           borderRadius: "5px",
           zIndex: 1000,
@@ -333,7 +337,9 @@ const Quiz = (props) => {
                   </p>
                   <p>
                     <strong>They actually:</strong>{" "}
-                    {lastDecision.reoffended ? "Reoffended" : "Did not reoffend"}
+                    {lastDecision.reoffended
+                      ? "Reoffended"
+                      : "Did not reoffend"}
                   </p>
                   <p style={{ marginTop: "12px", fontStyle: "italic" }}>
                     (Click this window to continue)

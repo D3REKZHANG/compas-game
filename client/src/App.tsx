@@ -6,7 +6,7 @@ import { End } from "./End";
 import ResultWrapper from "./ResultWrapper.tsx";
 import "./App.css";
 import { Menu } from "./Menu";
-import { References } from "./References"
+import { References } from "./References";
 import { LeaderboardScreen } from "./Leaderboard";
 
 const App = () => {
@@ -31,7 +31,7 @@ const App = () => {
           case "REFERENCES":
             return <References setGamestate={setGamestate} />;
           case "LEADERBOARD":
-              return <LeaderboardScreen setGamestate={setGamestate} />;
+            return <LeaderboardScreen setGamestate={setGamestate} />;
           case "INTRO":
             return <Intro setGamestate={setGamestate} />;
           case "QUIZ1":

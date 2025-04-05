@@ -38,16 +38,15 @@ export const updateScore = (
     if (is_recid) {
       totalScore += score;
     } else {
-      totalScore += (11 - score);
+      totalScore += 11 - score;
     }
   }
-  
+
   if (is_recid) {
     totalCompasScore += compasScore;
   } else {
-    totalCompasScore += (11 - compasScore);
+    totalCompasScore += 11 - compasScore;
   }
-  
 
   console.log(
     count,
@@ -64,7 +63,6 @@ export const updateScore = (
   );
 };
 
-
 export const getScore = (): number | null => totalScore;
 export const getCompasScore = (): number | null => totalCompasScore;
 export const getFalsePositiveRate = (): number | null => falsePositiveCount;
@@ -73,7 +71,7 @@ export const getTruePositiveRate = (): number | null => truePositiveCount;
 export const getTrueNegativeRate = (): number | null => trueNegativeCount;
 
 export const setTrial1Score = (score: number): void => {
-    trial1Score = score;
+  trial1Score = score;
 };
 
 export const setTrial2Score = (score: number): void => {

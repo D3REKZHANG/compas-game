@@ -11,7 +11,7 @@ const ResultWrapper = ({
   falseNegative,
   truePositive,
   trueNegative,
-  onNextTrial
+  onNextTrial,
 }) => {
   useEffect(() => {
     setTrialScore(score);

@@ -8,7 +8,7 @@
 button {
   padding: 10px;
   margin-right: 10px;
-  font-family: 'Courier New';
+  font-family: "Courier New";
   font-size: 25px;
   background-color: transparent;
 }
@@ -19,6 +19,6 @@ button:hover {
 
 input {
   padding: 10px;
-  font-family: 'Courier New';
+  font-family: "Courier New";
   font-size: 25px;
 }
