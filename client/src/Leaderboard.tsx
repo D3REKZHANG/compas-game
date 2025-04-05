@@ -47,7 +47,7 @@ const LeaderboardScreen = ({ setGamestate }) => {
               <li key={index}>
                 <p>
                   {" "}
-                  {index + 1}. {name}{" "}
+                  {index + 1}. {index < 9 && '\u00A0'}{name}{" "}
                 </p>
                 <p> {score} </p>
               </li>
@@ -65,7 +65,7 @@ const LeaderboardScreen = ({ setGamestate }) => {
               <li key={index}>
                 <p>
                   {" "}
-                  {index + 1}. {name}{" "}
+                  {index + 1}. {index < 9 && '\u00A0'}{name}{" "}
                 </p>
                 <p> {score} </p>
               </li>

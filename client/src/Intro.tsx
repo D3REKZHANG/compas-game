@@ -37,7 +37,7 @@ const Intro = ({ setGamestate }) => {
             Review each case and give the defendant a score between 1 and 10
             based on how likely it is you think they’ll reoffend. A rating
             between 1-4 signals a low risk of reoffense, while 5-7 indicates
-            moderate risk, and 8-10 high risk. You will be given 30 seconds per
+            moderate risk, and 8-10 high risk. You will be given 45 seconds per
             case, so act decisively!
           </p>
           <p>
