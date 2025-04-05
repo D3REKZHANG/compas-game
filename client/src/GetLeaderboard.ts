@@ -1,6 +1,6 @@
 export type Leaderboard = [string, number][];
 
-export const fetchLeaderboard = async (type: number): Promise<ParsedData | null> => {
+export const fetchLeaderboard = async (type: number): Promise<Leaderboard | null> => {
   try {
     const response = await fetch(`https://compas-api.derekzhang.ca/leaderboard?type=${type}`);
     const jsonData = await response.json();
