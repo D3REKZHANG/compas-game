@@ -92,18 +92,18 @@ export const fetchData = async (): Promise<ParsedData | null> => {
       jailhistory: jsonData.jailhistory.map((history: any) => ({
         in_custody: format(history.in_custody),
         out_custody: format(history.out_custody),
-      })),
+      })).sort((a,b) => a.in_custody < b.in_custody),
       previous_charges: jsonData.previous_charges.map((charge: any) => ({
         charge: charge.charge,
         charge_degree: charge.charge_degree,
         charge_number: charge.charge_number,
         offense_date: format(charge.offense_date),
-      })),
+      })).sort((a,b) => a.offense_date < b.offense_date),
       prisonhistory: Array.isArray(jsonData.prisonhistory)
         ? jsonData.prisonhistory.map((history: any) => ({
             in_custody: format(history.in_custody),
             out_custody: format(history.out_custody),
-          }))
+          })).sort((a,b) => a.in_custody < b.in_custody)
         : [], // If it's not an array, default to an empty array
       recid_info: jsonData.recid_info
         ? {

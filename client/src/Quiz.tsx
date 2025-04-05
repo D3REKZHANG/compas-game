@@ -89,6 +89,8 @@ const Quiz = (props) => {
     setDetain(null);
     setShowResultPopup(false);
 
+    window.scroll({ top: 0, left: 0, behavior: "smooth" });
+
     if (caseNumber < NUM_CASES) {
       setCaseNumber((prev) => prev + 1);
       getData();

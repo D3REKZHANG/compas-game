@@ -10,3 +10,7 @@
   text-indent: -40px; /* Negative indent to create hanging indent */
   padding-left: 40px; /* Pushes the rest of the text back into place */
 }
+
+.reference a {
+  margin-left: 10px;
+}
