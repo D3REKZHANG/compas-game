@@ -7,6 +7,7 @@ import ResultWrapper from "./ResultWrapper.tsx";
 import "./App.css";
 import { Menu } from "./Menu";
 import { References } from "./References"
+import { LeaderboardScreen } from "./Leaderboard";
 
 const App = () => {
   const [gamestate, setGamestate] = useState("MENU");
@@ -29,6 +30,8 @@ const App = () => {
             return <Menu setGamestate={setGamestate} />;
           case "REFERENCES":
             return <References setGamestate={setGamestate} />;
+          case "LEADERBOARD":
+              return <LeaderboardScreen setGamestate={setGamestate} />;
           case "INTRO":
             return <Intro setGamestate={setGamestate} />;
           case "QUIZ1":
