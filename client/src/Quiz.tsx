@@ -40,8 +40,7 @@ const Quiz = (props) => {
     released: boolean | null;
   }>({ reoffended: null, released: null });
 
-  // Timer states
-  const [timeLeft, setTimeLeft] = useState(20);
+  const [timeLeft, setTimeLeft] = useState(30);
   const [timedOut, setTimedOut] = useState(false);
 
   const getData = async () => {
@@ -49,16 +48,13 @@ const Quiz = (props) => {
     const fetchedData = await fetchData();
     setData(fetchedData);
     setLoading(false);
-    // Here we no longer reset timeLeft/timedOut because we do that in the popup click handler
     window.scroll({ top: 0, left: 0, behavior: "smooth" });
   };
 
-  // On mount, start game.
   useEffect(() => {
     handleResetGame();
   }, []);
 
-  // Update global scores when new data arrives.
   useEffect(() => {
     setScore(getScore());
     setCompasScore(getCompasScore());
@@ -68,13 +64,12 @@ const Quiz = (props) => {
     setTrueNegative(getTrueNegativeRate());
   }, [data]);
 
-  // Timer effect: counts down unless popup is visible.
   useEffect(() => {
     if (showResultPopup) return;
     if (timeLeft <= 0) {
       if (!timedOut) {
         setTimedOut(true);
-        handleTimeoutScore(); // ✅ Now we safely update compas-only score
+        handleTimeoutScore();
         setLastDecision({ reoffended: null, released: null });
         setShowResultPopup(true);
       }
@@ -85,12 +80,9 @@ const Quiz = (props) => {
     }, 1000);
     return () => clearInterval(timerId);
   }, [timeLeft, showResultPopup, timedOut]);
-  
 
-  // Explicit popup click handler.
   const handlePopupClick = () => {
-    // Reset timer and decision state before moving on.
-    setTimeLeft(20);
+    setTimeLeft(30);
     setTimedOut(false);
     setLastDecision({ reoffended: null, released: null });
     setScoreInput(null);
@@ -122,7 +114,6 @@ const Quiz = (props) => {
     const compasScore = recidivismAssessment.decile_score;
     const reoffended = data?.is_recid === 1;
   
-    // Assume default user score = 0
     updateScore(0, compasScore, null, null, true);
 
     setScore(getScore());
@@ -148,8 +139,6 @@ const Quiz = (props) => {
     const reoffended = data.is_recid === 1;
     console.log("In updateScore", score, compasScore, detain, data.is_recid);
 
-  
-    // If timed out, still update compas score via updateScore with score = 0, and return early
     if (timedOut) {
       updateScore(0, compasScore, false, reoffended, true); // true = skip
       setScore(getScore());
@@ -191,8 +180,7 @@ const Quiz = (props) => {
     setFalseNegative(0);
     setTruePositive(0);
     setTrueNegative(0);
-    // Also reset timer state.
-    setTimeLeft(20);
+    setTimeLeft(30);
     setTimedOut(false);
     getData();
   };

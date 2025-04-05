@@ -30,7 +30,7 @@ const Intro = ({ setGamestate }) => {
 
       {(state == 1) && <>
       <p>
-Review each case and give the defendant a score between 1 and 10 based on how likely it is you think they’ll reoffend. A rating between 1-4 signals a low risk of reoffense, while 5-7 indicates moderate risk, and 8-10 high risk. You will be given 20 seconds per case, so act decisively!
+Review each case and give the defendant a score between 1 and 10 based on how likely it is you think they’ll reoffend. A rating between 1-4 signals a low risk of reoffense, while 5-7 indicates moderate risk, and 8-10 high risk. You will be given 30 seconds per case, so act decisively!
         </p>
         <p>
 The accuracy of your risk assessments will be evaluated by comparing your score to whether or not the subject reoffended. If you rated the defendant a 10 (high risk) and the subject reoffended, then we award 10 points. Conversely, if the rating is 10 but they don’t reoffend, only 1 point is awarded. In general, points=score if the subject reoffended or 11-score if the subject did not.
