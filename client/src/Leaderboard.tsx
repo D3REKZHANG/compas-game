@@ -54,7 +54,8 @@ const LeaderboardScreen = ({ setGamestate }) => {
           <ul className="leaderboard-list">
             {leaderboard2.map(([name, score], index) => (
               <li key={index}>
-                {index + 1}. {name}: {score}
+                <p> {index + 1}. {name} </p>
+                <p> {score} </p>
               </li>
             ))}
           </ul>
